@@ -1,0 +1,23 @@
+buildscript {
+    ext {
+        layoutlib_version = '25.0.0'
+    }
+    repositories {
+        mavenCentral()
+        jcenter()
+        google()
+    }
+
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:5.1.0'
+    }
+}
+
+subprojects {
+    repositories {
+        mavenCentral()
+        jcenter()
+        google()
+    }
+}
+
