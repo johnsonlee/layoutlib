@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="layoutlib-26">
+    <CLASSES>
+      <root url="jar://$ANDROID_HOME$/platforms/android-26/data/layoutlib.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
