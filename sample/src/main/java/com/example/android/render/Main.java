@@ -51,7 +51,7 @@ import java.util.List;
 public class Main {
 
     // path to the SDK and the project to render
-    private final static String SDK = System.getenv("ANDROID_HOME");
+    private final static String SDK = System.getenv().getOrDefault("ANDROID_HOME", System.getProperty("user.home") + File.separator + "Library" + File.separator + "Android" + File.separator + "sdk");
 
     private final static String CWD = System.getProperty("user.dir");
 
