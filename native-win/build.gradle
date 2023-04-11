@@ -1,0 +1,26 @@
+apply plugin: 'com.vanniktech.maven.publish'
+
+version = libs.versions.layoutlib.get()
+description = "Android runtime for Windows, fonts, and ICU data"
+
+tasks.register('winJar', Jar) {
+  archiveFileName = "native-win-${version}.jar"
+  destinationDirectory.set(file("${buildDir}/libs"))
+  from(repoDir) {
+    include 'data/win/**'
+    include 'data/fonts/**'
+    include 'data/icu/**'
+    exclude '**/BUILD'
+  }
+  dependsOn(':native-jdk11:cloneLayoutlib')
+}
+
+publishing {
+  publications {
+    mavenNativeLibrary(MavenPublication) {
+      artifact winJar
+      artifact emptySourcesJar
+      artifact emptyJavadocJar
+    }
+  }
+}

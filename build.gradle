@@ -1,0 +1,112 @@
+apply plugin: 'com.github.ben-manes.versions'
+
+buildscript {
+  ext.repoDir = new File("$rootProject.buildDir/prebuilts/studio/layoutlib")
+  repositories {
+    mavenCentral()
+    google()
+    gradlePluginPortal()
+  }
+
+  dependencies {
+    classpath libs.plugin.kotlin
+    classpath libs.plugin.android
+    classpath libs.plugin.mavenPublish
+    classpath libs.plugin.grgit
+    classpath libs.plugin.dokka
+    classpath libs.plugin.versions
+  }
+}
+
+subprojects { subproject ->
+  group = 'io.johnsonlee.layoutlib'
+  version = libs.versions.layoutlib.get()
+
+  repositories {
+    mavenCentral()
+    google()
+  }
+
+  tasks.withType(JavaCompile).configureEach {
+    sourceCompatibility = libs.versions.javaTarget.get()
+    targetCompatibility = libs.versions.javaTarget.get()
+  }
+
+  tasks.withType(org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile).configureEach {
+    kotlinOptions {
+      jvmTarget = libs.versions.javaTarget.get()
+    }
+  }
+
+  plugins.withId('com.vanniktech.maven.publish') {
+    publishing {
+      publications {
+        withType(MavenPublication).configureEach {
+          groupId = subproject.group
+          artifactId = subproject.name
+          version = subproject.version
+
+          pom {
+            name = subproject.name
+            url = "https://github.com/johnsonlee/layoutlib"
+            description = subproject.description ?: subproject.name
+
+            scm {
+              connection = 'scm:git:git://github.com/johnsonlee/layoutlib.git'
+              developerConnection = 'scm:git:git@github.com:johnsonlee/layoutlib.git'
+              url = 'https://github.com/johnsonlee/layoutlib'
+            }
+
+            licenses {
+              license {
+                name = 'Apache License'
+                url = 'https://www.apache.org/licenses/LICENSE-2.0'
+              }
+            }
+            developers {
+              developer {
+                id = 'johnsonlee'
+                email = 'g.johnsonlee@gmail.com'
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+
+  tasks.register('emptySourcesJar', Jar) {
+    archiveClassifier = 'sources'
+    archiveFileName = "empty-sources.jar"
+    destinationDirectory.set(file("${buildDir}/libs"))
+    doFirst {
+      def emptySourcesFile = new File("${buildDir}/tmp/empty-sources")
+      emptySourcesFile.mkdirs()
+      def emptySourcesJar = new File(destinationDirectory.get().asFile, archiveFileName.get())
+      emptySourcesJar.withOutputStream { out ->
+          new java.util.jar.JarOutputStream(out).close()
+      }
+      from(emptySourcesFile)
+    }
+  }
+
+  tasks.register('emptyJavadocJar', Jar) {
+    archiveClassifier = 'javadoc'
+    archiveFileName = "empty-javadoc.jar"
+    destinationDirectory.set(file("${buildDir}/libs"))
+    doFirst {
+      def emptyJavadocFile = new File("${buildDir}/tmp/empty-javadoc")
+      emptyJavadocFile.mkdirs()
+      def emptyJavadocJar = new File(destinationDirectory.get().asFile, archiveFileName.get())
+      emptyJavadocJar.withOutputStream { out ->
+          new java.util.jar.JarOutputStream(out).close()
+      }
+      from(emptyJavadocFile)
+    }
+  }
+}
+
+tasks.register("clean", Delete).configure {
+  delete rootProject.buildDir
+}
+
