@@ -5,8 +5,8 @@ kotlin = "1.7.20"
 
 # Maps to this commit: https://android.googlesource.com/platform/prebuilts/studio/layoutlib/+/5e972ea
 # which runs on JDK 11.
-studioTag = "2022.3.1-5e972ea"
-studioSha = "5e972ea"
+studioTag = "2022.2.1-5128371"
+studioSha = "5128371"
 
 
 [libraries]
