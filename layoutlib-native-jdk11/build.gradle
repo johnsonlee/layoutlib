@@ -1,7 +1,7 @@
 apply plugin: 'org.ajoberstar.grgit'
 apply plugin: 'com.vanniktech.maven.publish'
 
-version = libs.versions.layoutlib.get()
+version = libs.versions.studioTag.get()
 description = "Android Studio's native layoutlib binary compatible with JDK 11+"
 
 /**
@@ -11,7 +11,7 @@ description = "Android Studio's native layoutlib binary compatible with JDK 11+"
  */
 tasks.register('cloneLayoutlib') {
   it.outputs.dir(repoDir)
-  it.inputs.property('sha', libs.versions.layoutlibPrebuiltSha)
+  it.inputs.property('sha', libs.versions.studioSha)
 
   doFirst {
     // Gradle aggressively creates outputs directories, which interferes with the git clone check
@@ -31,9 +31,9 @@ tasks.register('cloneLayoutlib') {
       dir = repoDir
     }
 
-    logger.warn("Checking out SHA ${libs.versions.layoutlibPrebuiltSha.get()}")
+    logger.warn("Checking out SHA ${libs.versions.studioSha.get()}")
     repo.checkout {
-      branch = libs.versions.layoutlibPrebuiltSha.get()
+      branch = libs.versions.studioSha.get()
     }
   }
 }
@@ -41,10 +41,9 @@ tasks.register('cloneLayoutlib') {
 publishing {
   publications {
     mavenNativeLibrary(MavenPublication) {
-      artifact(tasks.
-          named("cloneLayoutlib").
-          map { new File(it.outputs.files.getSingleFile(), 'data/layoutlib.jar') }
-      )
+      artifact(tasks.named("cloneLayoutlib").map {
+        new File(it.outputs.files.getSingleFile(), 'data/layoutlib.jar')
+      })
       artifact emptySourcesJar
       artifact emptyJavadocJar
     }

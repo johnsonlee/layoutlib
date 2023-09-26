@@ -1,10 +1,10 @@
 apply plugin: 'com.vanniktech.maven.publish'
 
-version = libs.versions.layoutlib.get()
+version = libs.versions.studioTag.get()
 description = "Android runtime for Linux, fonts, and ICU data"
 
 tasks.register('linuxJar', Jar) {
-  archiveFileName = "native-linux-${version}.jar"
+  archiveFileName = "${project.name}-${version}.jar"
   destinationDirectory.set(file("${buildDir}/libs"))
   from(repoDir) {
     include 'data/linux/**'
@@ -12,7 +12,7 @@ tasks.register('linuxJar', Jar) {
     include 'data/icu/**'
     exclude '**/BUILD'
   }
-  dependsOn(':native-jdk11:cloneLayoutlib')
+  dependsOn(':layoutlib-native-jdk11:cloneLayoutlib')
 }
 
 publishing {

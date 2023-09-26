@@ -1,8 +1,8 @@
 rootProject.name = 'layoutlib'
 
-include ':native-jdk11'
-include ':native-macarm'
-include ':native-macosx'
-include ':native-win'
-include ':native-linux'
+include ':layoutlib-native-jdk11'
+include ':layoutlib-native-macarm'
+include ':layoutlib-native-macosx'
+include ':layoutlib-native-win'
+include ':layoutlib-native-linux'
 

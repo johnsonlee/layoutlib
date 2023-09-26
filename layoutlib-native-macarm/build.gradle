@@ -1,24 +1,24 @@
 apply plugin: 'com.vanniktech.maven.publish'
 
-version = libs.versions.layoutlib.get()
-description = "Android runtime for macOSX, fonts, and ICU data"
+version = libs.versions.studioTag.get()
+description = "Android runtime for Macarm, fonts, and ICU data"
 
-tasks.register('macJar', Jar) {
-  archiveFileName = "native-mac-${version}.jar"
+tasks.register('macArmJar', Jar) {
+  archiveFileName = "${project.name}-${version}.jar"
   destinationDirectory.set(file("${buildDir}/libs"))
   from(repoDir) {
-    include 'data/mac/**'
+    include 'data/mac-arm/**'
     include 'data/fonts/**'
     include 'data/icu/**'
     exclude '**/BUILD'
   }
-  dependsOn(':native-jdk11:cloneLayoutlib')
+  dependsOn(':layoutlib-native-jdk11:cloneLayoutlib')
 }
 
 publishing {
   publications {
     mavenNativeLibrary(MavenPublication) {
-      artifact macJar
+      artifact macArmJar
       artifact emptySourcesJar
       artifact emptyJavadocJar
     }

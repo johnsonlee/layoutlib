@@ -1,3 +1,7 @@
+import java.util.jar.JarOutputStream
+import com.vanniktech.maven.publish.SonatypeHost
+import org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile
+
 apply plugin: 'com.github.ben-manes.versions'
 
 buildscript {
@@ -19,8 +23,8 @@ buildscript {
 }
 
 subprojects { subproject ->
-  group = 'io.johnsonlee.layoutlib'
-  version = libs.versions.layoutlib.get()
+  group = 'io.johnsonlee'
+  version = libs.versions.studioTag.get()
 
   repositories {
     mavenCentral()
@@ -32,13 +36,18 @@ subprojects { subproject ->
     targetCompatibility = libs.versions.javaTarget.get()
   }
 
-  tasks.withType(org.jetbrains.kotlin.gradle.dsl.KotlinJvmCompile).configureEach {
+  tasks.withType(KotlinJvmCompile).configureEach {
     kotlinOptions {
       jvmTarget = libs.versions.javaTarget.get()
     }
   }
 
   plugins.withId('com.vanniktech.maven.publish') {
+    mavenPublishing {
+      publishToMavenCentral(SonatypeHost.DEFAULT)
+      signAllPublications()
+    }
+
     publishing {
       publications {
         withType(MavenPublication).configureEach {
@@ -84,7 +93,7 @@ subprojects { subproject ->
       emptySourcesFile.mkdirs()
       def emptySourcesJar = new File(destinationDirectory.get().asFile, archiveFileName.get())
       emptySourcesJar.withOutputStream { out ->
-          new java.util.jar.JarOutputStream(out).close()
+          new JarOutputStream(out).close()
       }
       from(emptySourcesFile)
     }
@@ -99,7 +108,7 @@ subprojects { subproject ->
       emptyJavadocFile.mkdirs()
       def emptyJavadocJar = new File(destinationDirectory.get().asFile, archiveFileName.get())
       emptyJavadocJar.withOutputStream { out ->
-          new java.util.jar.JarOutputStream(out).close()
+          new JarOutputStream(out).close()
       }
       from(emptyJavadocFile)
     }
