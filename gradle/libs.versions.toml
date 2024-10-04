@@ -3,10 +3,10 @@ agp = "7.4.0"
 javaTarget = "11"
 kotlin = "1.7.20"
 
-# Maps to this commit: https://android.googlesource.com/platform/prebuilts/studio/layoutlib/+/a73a761
+# Maps to this commit: https://android.googlesource.com/platform/prebuilts/studio/layoutlib/+/6c7316c
 # which runs on JDK 11.
-studioTag = "2023.1.1-a73a761"
-studioSha = "a73a761"
+studioTag = "2023.2.1-6c7316c"
+studioSha = "6c7316c"
 
 
 [libraries]
